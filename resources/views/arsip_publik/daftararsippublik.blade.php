@@ -10,7 +10,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover table-striped">
                 <thead class="bg-light">
                     <tr>
                         <th width="5%" class="text-center">No</th>
@@ -45,7 +45,7 @@
                                     </form>
                                 @endif
 
-                                <div class="modal fade text-start" id="detailModal{{ $item->id }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $item->id }}" aria-hidden="true">
+                                <div class="modal fade text-left" id="detailModal{{ $item->id }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $item->id }}" aria-hidden="true">
                                     <div class="modal-dialog modal-lg modal-dialog-scrollable">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -54,36 +54,56 @@
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
-                                            <div class="modal-body">
-                                                <table class="table table-bordered table-sm text-left">
+                                            <div class="modal-body p-0">
+                                                <table class="table table-bordered table-striped table-sm mb-0 text-left">
                                                     <tbody>
-                                                        <tr><th width="35%" class="bg-light">Judul</th><td>{{ $item->judul }}</td></tr>
-                                                        <tr><th class="bg-light">Nomor Arsip</th><td>{{ $item->nomor_arsip ?? '-' }}</td></tr>
-                                                        <tr><th class="bg-light">Kategori</th><td>{{ $item->kategori_berita ?? '-' }}</td></tr>
-                                                        <tr><th class="bg-light">Uraian Informasi</th><td>{{ $item->uraian_informasi ?? '-' }}</td></tr>
-                                                        <tr><th class="bg-light">Tanggal</th><td>{{ $item->tanggal ?? '-' }}</td></tr>
-                                                        <tr><th class="bg-light">Unit Pengolah</th><td>{{ $item->unitPengolah->nama_unit ?? '-' }}</td></tr>
+                                                        <tr><th colspan="2" class="bg-light text-primary fw-bold px-3">DATA ARSIP</th></tr>
+                                                        <tr><th width="35%" class="px-3">Judul</th><td class="px-3">{{ $item->judul }}</td></tr>
+                                                        <tr><th class="px-3">Nomor Arsip</th><td class="px-3">{{ $item->nomor_arsip ?? $item->nomor ?? '-' }}</td></tr>
+                                                        <tr><th class="px-3">Kode Klasifikasi</th><td class="px-3">{{ $item->kodeKlasifikasi->kode ?? '-' }} - {{ $item->kodeKlasifikasi->uraian ?? '-' }}</td></tr>
+                                                        <tr><th class="px-3">Kategori</th><td class="px-3">{{ $item->kategori_berita ?? '-' }}</td></tr>
+                                                        <tr><th class="px-3">Indeks</th><td class="px-3">{{ $item->indeks ?? '-' }}</td></tr>
+                                                        <tr><th class="px-3">Uraian Informasi</th><td class="px-3">{{ $item->uraian_informasi ?? '-' }}</td></tr>
+                                                        <tr><th class="px-3">Tanggal</th><td class="px-3">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') : '-' }}</td></tr>
+                                                        <tr><th class="px-3">Tingkat Perkembangan</th><td class="px-3">{{ $item->tingkat_perkembangan ?? '-' }}</td></tr>
+                                                        <tr><th class="px-3">Jumlah</th><td class="px-3">{{ $item->jumlah ?? '-' }} {{ $item->satuan ?? '-' }}</td></tr>
+                                                        <tr><th class="px-3">Unit Pengolah</th><td class="px-3">{{ $item->unitPengolah->nama_unit ?? '-' }}</td></tr>
+
+                                                        <tr><th colspan="2" class="bg-light text-primary fw-bold px-3">LOKASI ARSIP</th></tr>
+                                                        <tr><th class="px-3">Ruangan</th><td class="px-3">{{ $item->ruangan ?? '-' }}</td></tr>
+                                                        <tr><th class="px-3">No Box</th><td class="px-3">{{ $item->no_box ?? '-' }}</td></tr>
+                                                        <tr><th class="px-3">No Filling</th><td class="px-3">{{ $item->no_filling ?? '-' }}</td></tr>
+                                                        <tr><th class="px-3">No Laci</th><td class="px-3">{{ $item->no_laci ?? '-' }}</td></tr>
+                                                        <tr><th class="px-3">No Folder</th><td class="px-3">{{ $item->no_folder ?? '-' }}</td></tr>
+                                                        <tr><th class="px-3">Keterangan</th><td class="px-3">{{ $item->keterangan ?? '-' }}</td></tr>
+
+                                                        <tr><th colspan="2" class="bg-light text-primary fw-bold px-3">DOKUMEN & STATUS</th></tr>
                                                         <tr>
-                                                            <th class="bg-light">Dokumen</th>
-                                                            <td>
+                                                            <th class="px-3">Status Verifikasi</th>
+                                                            <td class="px-3">
+                                                                <span class="badge badge-success px-3 py-1">Arsip Publik</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="px-3">Dokumen</th>
+                                                            <td class="px-3">
                                                                 @if($item->upload_dokumen)
-                                                        @php
-                                                            $ekstensi = pathinfo($item->upload_dokumen, PATHINFO_EXTENSION);
-                                                    @endphp
+                                                                    @php
+                                                                        $ekstensi = pathinfo($item->upload_dokumen, PATHINFO_EXTENSION);
+                                                                    @endphp
 
-                                                    @if(in_array($ekstensi, ['pdf', 'jpg', 'jpeg', 'png']))
-                                                        <a href="{{ route('arsip.lihat', $item->id) }}" target="_blank">
-                                                            <i class="fas fa-file-pdf"></i> Lihat File Dokumen
-                                                        </a>
-                                                    @else
-                                                         <a href="{{ route('arsip.lihat', $item->id) }}" class="text-primary font-weight-bold" style="text-decoration: underline;">
-                                                            <i class="fas fa-file-word"></i> Unduh Dokumen (Word/Excel)
-                                                        </a>
-                                                    @endif
-
-                                                    @else
-                                                        <span class="text-danger fst-italic">Tidak ada file yang dilampirkan</span>
-                                                    @endif
+                                                                    @if(in_array($ekstensi, ['pdf', 'jpg', 'jpeg', 'png']))
+                                                                        <a href="{{ route('arsip.lihat', $item->id) }}" target="_blank" class="btn btn-sm btn-primary">
+                                                                            <i class="fas fa-file-pdf"></i> Lihat File Dokumen
+                                                                        </a>
+                                                                    @else
+                                                                        <a href="{{ route('arsip.lihat', $item->id) }}" class="btn btn-sm btn-success">
+                                                                            <i class="fas fa-file-word"></i> Unduh Dokumen (Word/Excel)
+                                                                        </a>
+                                                                    @endif
+                                                                @else
+                                                                    <span class="text-danger fst-italic">Tidak ada file yang dilampirkan</span>
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -95,7 +115,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </td>
+                                </td>
                         </tr>
                     @empty
                         <tr>

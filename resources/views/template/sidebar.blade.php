@@ -28,6 +28,10 @@
                         <div class="sb-nav-link-icon"><i class="fas fa-folder-open"></i></div>
                         Daftar Arsip Publik
                     </a>
+                    <a class="nav-link" href="{{ route('users.index') }}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-fw fa-users"></i></div>
+                        <span>Manajemen Akun</span>
+                    </a>
                 @endif
 
                 @if(auth()->user()->role == 'manajemen')

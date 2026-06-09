@@ -19,6 +19,10 @@
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header text-center">
+                                        <div class="text-center mb-3">
+                                        <img src="{{ asset('assets/img/rri-bjm-logo.png') }}" alt="Logo Instansi" style="max-width: 160px;">
+                                        </div>
+
                                         <h3 class="font-bold-light mt-4 mb-1">Selamat Datang</h3>
                                         <p class="text-muted mb-4">Silahkan masuk ke akun Anda</p></div>
                                     <div class="card-body">

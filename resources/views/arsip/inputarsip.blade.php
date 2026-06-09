@@ -3,10 +3,10 @@
 @section('content')
 
 <main class="p-3 p-md-4">
-    <form action="{{ route('arsip.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('arsip.store') }}" method="POST" enctype="multipart/form-data" novalidate>
         @csrf
 
-        <div class="bg-white p-4 p-md-5 rounded shadow-sm">
+        <div class="bg-white p-4 p-md-5 rounded shadow-sm mb-4">
             <h2 class="fw-bold mb-4" style="color: #003B69; font-size: 1.25rem;">Input Arsip</h2>
             
             <div class="mb-3">
@@ -16,7 +16,7 @@
 
             <div class="mb-3">
                 <label class="form-label fw-medium">Nomor</label>
-                <input type="text" name="nomor" class="form-control">
+                <input type="text" name="nomor" class="form-control" required>
             </div>
 
             <div class="mb-3">
@@ -31,8 +31,8 @@
 
             <div class="mb-3">
                 <label class="form-label fw-medium">Kategori</label>
-                <select id="kategori_berita" name="kategori_berita" class="form-select text-secondary">
-                    <option value="-">-</option>
+                <select id="kategori_berita" name="kategori_berita" class="form-select text-secondary" required>
+                    <option value="">-</option>
                     <option value="Keputusan LPP RRI dan Pertimbangannya (Tersedia setiap saat)">Keputusan LPP RRI dan Pertimbangannya (Tersedia setiap saat)</option>
                     <option value="Kebijakan LPP RRI dan Dokumen Pendukungnya (Tersedia setiap saat)">Kebijakan LPP RRI dan Dokumen Pendukungnya (Tersedia setiap saat)</option>
                     <option value="Rencana Proyek dan Anggaran Tahunnya (Tersedia setiap saat)">Rencana Proyek dan Anggaran Tahunnya (Tersedia setiap saat)</option>
@@ -108,21 +108,22 @@
                     <option value="Pasal 17 UU 14 Tahun 2008 (Dikecualikan)">Pasal 17 UU 14 Tahun 2008 (Dikecualikan)</option>
                 </select>
             </div>
+            
             <input type="hidden" id="kategori" name="kategori" value="-">
 
             <div class="mb-3">
                 <label class="form-label fw-medium">Indeks</label>
-                <input type="text" name="indeks" class="form-control">
+                <input type="text" name="indeks" class="form-control" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-medium">Uraian Informasi</label>
-                <textarea name="uraian_informasi" class="form-control" rows="3"></textarea>
+                <textarea name="uraian_informasi" class="form-control" rows="3" required></textarea>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-medium">Tanggal</label>
-                <input type="date" name="tanggal" class="form-control text-secondary">
+                <input type="date" name="tanggal" class="form-control text-secondary" required>
             </div>
 
             <div class="mb-3">
@@ -135,10 +136,10 @@
                 </select>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3 form-group-jumlah">
                 <label class="form-label fw-medium">Jumlah</label>
                 <div class="d-flex gap-3">
-                    <input type="number" name="jumlah" min="0" class="form-control text-center" style="max-width: 120px;" placeholder="0">
+                    <input type="number" name="jumlah" min="0" class="form-control text-center" style="max-width: 120px;" placeholder="0" required>
                     <select name="satuan" class="form-select text-secondary" style="max-width: 150px;" required>
                         <option value="lembar">Lembar</option>
                         <option value="jilid">Jilid</option>
@@ -153,37 +154,39 @@
                 <input type="hidden" name="unit_pengolah_id" value="{{ Auth::user()->unit_pengolah_id }}"> 
             </div>
 
-        </div> <div class="bg-white p-4 p-md-5 rounded shadow-sm">
+        </div> 
+        
+        <div class="bg-white p-4 p-md-5 rounded shadow-sm">
             <h2 class="fw-semibold mb-4" style="color: #003B69; font-size: 1.25rem;">Lokasi Arsip</h2>
             
             <div class="mb-3">
                 <label class="form-label fw-medium">Ruangan</label>
-                <input type="text" name="ruangan" class="form-control">
+                <input type="text" name="ruangan" class="form-control" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-medium">No Box</label>
-                <input type="text" name="no_box" class="form-control">
+                <input type="text" name="no_box" class="form-control" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-medium">No Filling</label>
-                <input type="text" name="no_filling" class="form-control">
+                <input type="text" name="no_filling" class="form-control" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-medium">No Laci</label>
-                <input type="text" name="no_laci" class="form-control">
+                <input type="text" name="no_laci" class="form-control" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-medium">No Folder</label>
-                <input type="text" name="no_folder" class="form-control">
+                <input type="text" name="no_folder" class="form-control" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-medium">Keterangan</label>
-                <textarea name="keterangan" class="form-control" rows="3"></textarea>
+                <textarea name="keterangan" class="form-control" rows="3" required></textarea>
             </div>
 
             <div class="mb-3">
@@ -192,10 +195,80 @@
             </div>
 
             <div class="d-flex justify-content-end gap-3 mt-5">
-                <a href="" class="btn btn-secondary px-4 shadow-sm">Kembali</a>
+                <a href="{{ route('arsip.index') }}" class="btn btn-secondary px-4 shadow-sm">Kembali</a>
                 <button type="submit" class="btn text-white px-4 shadow-sm" style="background-color: #003B69;">Simpan</button>
             </div>
         </div>
     </form>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const formInput = document.querySelector('form');
+
+        formInput.addEventListener('submit', function(event) {
+            let isValid = true;
+            
+            // Cari semua elemen wajib (input, select, textarea)
+            let elemenWajib = formInput.querySelectorAll('input[required], select[required], textarea[required]');
+
+            elemenWajib.forEach(function(elemen) {
+                // Bersihkan tampilan error lama
+                elemen.classList.remove('is-invalid');
+                let parentDiv = elemen.closest('.mb-3');
+                let errorLama = parentDiv.querySelector('.pesan-error-js');
+                if (errorLama) errorLama.remove();
+
+                // Jika elemen dibiarkan kosong
+                if (elemen.value.trim() === '') {
+                    isValid = false;
+                    elemen.classList.add('is-invalid'); // Tambah border merah
+
+                    // Buat pesan error merah
+                    let pesanError = document.createElement('small');
+                    pesanError.className = 'text-danger fw-bold mt-1 d-block pesan-error-js';
+                    pesanError.innerText = '* Kolom ini wajib diisi!';
+
+                    // Sisipkan pesan error ke dalam parent terdekat agar rapi
+                    parentDiv.appendChild(pesanError);
+                }
+            });
+
+            // Jika ada yang kosong, cegat form dan scroll ke error teratas
+            if (!isValid) {
+                event.preventDefault();
+                let errorPertama = formInput.querySelector('.is-invalid');
+                if (errorPertama) {
+                    errorPertama.focus();
+                    errorPertama.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+
+        // Hapus merah-merah secara otomatis saat user mulai mengetik/memilih
+        formInput.addEventListener('input', function(event) {
+            if (event.target.hasAttribute('required')) {
+                event.target.classList.remove('is-invalid');
+                let parentDiv = event.target.closest('.mb-3');
+                if (parentDiv) {
+                    let errorLama = parentDiv.querySelector('.pesan-error-js');
+                    if (errorLama) errorLama.remove();
+                }
+            }
+        });
+
+        // Tambahan khusus untuk elemen <select> agar merahnya hilang saat opsi diklik
+        formInput.addEventListener('change', function(event) {
+            if (event.target.tagName === 'SELECT' && event.target.hasAttribute('required')) {
+                event.target.classList.remove('is-invalid');
+                let parentDiv = event.target.closest('.mb-3');
+                if (parentDiv) {
+                    let errorLama = parentDiv.querySelector('.pesan-error-js');
+                    if (errorLama) errorLama.remove();
+                }
+            }
+        });
+    });
+</script>
+
 @endsection

@@ -35,3 +35,7 @@ Route::put('/arsip/{id}/verifikasi', [App\Http\Controllers\ArsipController::clas
 Route::get('/arsip-publik', [App\Http\Controllers\ArsipController::class, 'daftarArsipPublik'])->name('arsip.publik');
 
 Route::get('/arsip/lihat/{id}', [ArsipController::class, 'lihatDokumen'])->name('arsip.lihat');
+Route::get('/manajemen-akun', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+Route::post('/manajemen-akun', [App\Http\Controllers\UserController::class, 'store'])->name('users.store');
+Route::put('/manajemen-akun/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
+Route::delete('/manajemen-akun/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');

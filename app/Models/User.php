@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'unit_pengolah_id',
     ];
 
     /**
@@ -45,5 +47,11 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function unitPengolah()
+    {
+        // Menyatakan bahwa 1 User "Milik" (BelongsTo) 1 Unit Pengolah
+        return $this->belongsTo(UnitPengolah::class, 'unit_pengolah_id', 'id');
     }
 }
