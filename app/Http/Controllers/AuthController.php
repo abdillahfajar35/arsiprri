@@ -17,9 +17,28 @@ class AuthController extends Controller
 
         // kecocokan dengan database MySQL
         if (Auth::attempt($credentials)) {
-            // Jika cocok, buat sesi login dan arahkan ke dashboard
+            // Jika cocok, buat sesi login
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
+
+            // Ambil data user yang baru saja berhasil login
+            $user = Auth::user();
+
+            // Racik pesan selamat datang sesuai dengan role masing-masing
+            if ($user->role == 'up') {
+                // Mengambil nama unit melalui jembatan relasi unitPengolah
+                $namaUnit = $user->unitPengolah->nama_unit ?? 'Unit Pengolah';
+                $pesan = "Anda berhasil login ke" . $namaUnit;
+            } elseif ($user->role == 'ppid') {
+                $pesan = "Anda berhasil login ke Operator PPID";
+            } elseif ($user->role == 'manajemen') {
+                $pesan = "Anda berhasil login ke Manajemen";
+            } else {
+                $pesan = "Anda berhasil login ke dalam sistem";
+            }
+
+            // Alihkan ke dashboard sambil membawa oleh-oleh pesan sukses
+            // Ganti baris ini di AuthController.php
+            return redirect('/dashboard')->with('login_success', $pesan);
         }
 
         // Jika salah, kembalikan ke halaman login bawa pesan error

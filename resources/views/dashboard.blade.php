@@ -3,7 +3,6 @@
 @section('content')
 
 <div class="container-fluid px-4">
-
     @if(auth()->user()->role == 'up')
         
         @include('dashboard_roles.up')

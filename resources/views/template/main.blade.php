@@ -10,7 +10,7 @@
         <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
-    <style>
+    <style> 
         #layoutSidenav_content {
             padding-left: 225px !important;
             transition: padding-left 0.15s ease-in-out;
@@ -63,5 +63,22 @@
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="assets/demo/datatables-demo.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('login_success'))
+<script>
+Swal.fire({
+    toast: true,
+    position: 'top',
+    icon: 'success',
+    title: '{{ session('login_success') }}',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true
+});
+</script>
+@endif
     </body> 
 </html>
+    
