@@ -27,7 +27,7 @@ class AuthController extends Controller
             if ($user->role == 'up') {
                 // Mengambil nama unit melalui jembatan relasi unitPengolah
                 $namaUnit = $user->unitPengolah->nama_unit ?? 'Unit Pengolah';
-                $pesan = "Anda berhasil login ke" . $namaUnit;
+                $pesan = "Anda berhasil login ke " . $namaUnit;
             } elseif ($user->role == 'ppid') {
                 $pesan = "Anda berhasil login ke Operator PPID";
             } elseif ($user->role == 'manajemen') {

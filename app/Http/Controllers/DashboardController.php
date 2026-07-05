@@ -13,9 +13,6 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        // ⚠️ PENTING: Ganti kata 'role' di bawah ini dengan nama kolom hak akses di tabel users-mu.
-        // (Misalnya: $user->level, $user->hak_akses, atau $user->kategori)
-
         // =================================================================
         // 1. JIKA YANG LOGIN ADALAH PPID
         // =================================================================
@@ -26,18 +23,28 @@ class DashboardController extends Controller
             $totalBelumVerif = Arsip::where('status_verifikasi', 'pending')->count();
             $totalSudahVerif = Arsip::where('status_verifikasi', '!=', 'pending')->count();
 
-            return view('dashboard_roles.ppid', compact('statistikUnit', 'totalPublik', 'totalBelumVerif', 'totalSudahVerif'));
+            // Tambahan: Ambil 5 antrean arsip terbaru yang belum diverifikasi
+            $arsipTerbaru = Arsip::where('status_verifikasi', 'pending')
+                ->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get();
+
+            return view('dashboard_roles.ppid', compact('statistikUnit', 'totalPublik', 'totalBelumVerif', 'totalSudahVerif', 'arsipTerbaru'));
         }
         // =================================================================
         // 2. JIKA YANG LOGIN ADALAH MANAJEMEN
         // =================================================================
         elseif ($user->role == 'manajemen') {
 
-            // Silakan sesuaikan data apa saja yang ingin dilihat manajemen
             $totalSemuaArsip = Arsip::count();
             $totalPublik = Arsip::where('status_verifikasi', 'publik')->count();
 
-            return view('dashboard_roles.manajemen', compact('totalSemuaArsip', 'totalPublik'));
+            // Tambahan: Ambil 5 arsip terbaru secara keseluruhan (global)
+            $arsipTerbaru = Arsip::orderBy('created_at', 'desc')
+                ->take(5)
+                ->get();
+
+            return view('dashboard_roles.manajemen', compact('totalSemuaArsip', 'totalPublik', 'arsipTerbaru'));
         }
         // =================================================================
         // 3. JIKA YANG LOGIN ADALAH UNIT PENGOLAH (DEFAULT)
@@ -51,7 +58,13 @@ class DashboardController extends Controller
             $totalBelumVerif = Arsip::where('unit_pengolah_id', $unitId)->where('status_verifikasi', 'pending')->count();
             $totalSudahVerif = Arsip::where('unit_pengolah_id', $unitId)->where('status_verifikasi', '!=', 'pending')->count();
 
-            return view('dashboard_roles.up', compact('totalArsipUnit', 'totalPublik', 'totalBelumVerif', 'totalSudahVerif'));
+            // Tambahan: Ambil 5 arsip terbaru khusus milik unit pengolah yang sedang login
+            $arsipTerbaru = Arsip::where('unit_pengolah_id', $unitId)
+                ->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get();
+
+            return view('dashboard_roles.up', compact('totalArsipUnit', 'totalPublik', 'totalBelumVerif', 'totalSudahVerif', 'arsipTerbaru'));
         }
     }
 }

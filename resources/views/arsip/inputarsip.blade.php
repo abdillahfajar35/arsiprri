@@ -127,7 +127,7 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-medium">Tingkat Perkembangan</label>
+                <label class="form-label fw-medium">Tingkat Perkembangan Dokumen</label>
                 <select name="tingkat_perkembangan" class="form-select text-secondary" required>
                     <option value="Asli">Asli</option>
                     <option value="Fotocopy">Fotocopy</option>

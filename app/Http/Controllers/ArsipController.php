@@ -24,20 +24,20 @@ class ArsipController extends Controller
             $query->where('unit_pengolah_id', $user->unit_pengolah_id);
         }
 
-        // Fitur Pencarian Data (Bisa dipakai oleh Manajemen maupun Unit)
-        if ($request->filled('judul')) {
-            $query->where('judul', 'like', '%' . $request->judul . '%');
-        }
-        if ($request->filled('indeks')) {
-            $query->where('indeks', 'like', '%' . $request->indeks . '%');
-        }
-        if ($request->filled('uraian_informasi')) {
-            $query->where('uraian_informasi', 'like', '%' . $request->uraian_informasi . '%');
+        // 🌟 FITUR PENCARIAN (Berdasarkan Form Blade) 🌟
+        if ($request->filled('search')) {
+            $search = $request->search;
+            // Gunakan closure (function) agar 'orWhere' tidak bocor dan merusak pembatasan unit_pengolah_id
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', '%' . $search . '%')
+                    ->orWhere('nomor_arsip', 'like', '%' . $search . '%');
+            });
         }
 
-        $arsip = $query->orderBy('created_at', 'desc')->paginate(10);
+        // Tambahkan appends($request->all()) agar saat pindah halaman pagination, status search tidak hilang
+        $arsip = $query->orderBy('created_at', 'desc')->paginate(10)->appends($request->all());
 
-        // Dropdown pencarian judul
+        // Dropdown pencarian judul (tetap dipertahankan jika masih dipakai)
         $judulQuery = Arsip::select('judul')->distinct();
         // Batasi juga isi dropdown jika bukan manajemen
         if ($user->role != 'manajemen') {
@@ -211,8 +211,6 @@ class ArsipController extends Controller
 
         $arsip->delete();
 
-        // Menggunakan redirect()->back() agar setelah dihapus, 
-        // kembali ke halaman sebelumnya (tidak nyasar ke tempat lain).
         return redirect()->back()->with('success', 'Data arsip berhasil dihapus secara permanen.');
     }
 
@@ -221,7 +219,7 @@ class ArsipController extends Controller
     {
         $arsip = Arsip::with(['unitPengolah', 'kodeKlasifikasi'])
             ->where('status_verifikasi', 'pending')
-            ->orderBy('created_at', 'asc')
+            ->orderBy('tanggal', 'desc')
             ->paginate(10);
 
         return view('arsip.verifikasiarsip', compact('arsip'));
@@ -242,12 +240,22 @@ class ArsipController extends Controller
     }
 
     // --- 9. PUBLIK: Menampilkan Daftar Arsip Publik (Telah Disetujui) ---
-    public function daftarArsipPublik()
+    public function daftarArsipPublik(Request $request)
     {
-        $arsip = Arsip::with(['unitPengolah', 'kodeKlasifikasi'])
-            ->where('status_verifikasi', 'publik')
-            ->orderBy('updated_at', 'desc')
-            ->paginate(10);
+        $query = Arsip::with(['unitPengolah', 'kodeKlasifikasi'])
+            ->where('status_verifikasi', 'publik');
+
+        // Tambahan Logika Pencarian
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('judul', 'like', '%' . $search . '%')
+                    ->orWhere('nomor_arsip', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Jangan lupa appends($request->all()) agar search tidak hilang saat next page
+        $arsip = $query->orderBy('updated_at', 'desc')->paginate(10)->appends($request->all());
 
         return view('arsip_publik.daftararsippublik', compact('arsip'));
     }

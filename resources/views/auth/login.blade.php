@@ -64,7 +64,7 @@
                                             </div>
 
                                             <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                <a class="small" href="#">Lupa Kata Sandi?</a>
+                                                <a class="small" href="#"></a>
                                                 <button type="submit" class="btn btn-primary px-4 py-2 font-weight-bold" style="background-color: #1c3b5a; border: none; border-radius: 6px;">
                                                     Login <i class="fas fa-sign-in-alt ml-2"></i>
                                                 </button>

@@ -3,22 +3,42 @@
 @section('content')
 <main class="p-3 p-md-4">
     <div class="bg-white p-4 rounded shadow-sm mb-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
             <h2 class="fw-bold m-0" style="color:#003B69;">
                 <i class="fas fa-globe me-2"></i> Daftar Arsip Publik
             </h2>
         </div>
 
+        <div class="row mt-4 mb-3 px-3">
+            <div class="col-md-5 offset-md-7">
+                <form action="{{ url()->current() }}" method="GET">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Cari Judul atau Nomor Arsip..." value="{{ request('search') }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit" title="Cari Data">
+                                <i class="fas fa-search"></i> Cari
+                            </button>
+                            @if(request('search'))
+                                <a href="{{ url()->current() }}" class="btn btn-danger" title="Reset Pencarian">
+                                    <i class="fas fa-times"></i> Reset
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered table-hover table-striped">
-                <thead class="bg-light">
+                <thead class="table-dark" style="background-color: #1c3b5a;">
                     <tr>
-                        <th width="5%" class="text-center">No</th>
+                        <th class="text-center" width="5%">No</th>
                         <th>Judul Arsip</th>
                         <th>Nomor Arsip</th>
-                        <th>Kategori</th>
+                        <th>Tingkat Perkembangan</th>
                         <th>Tanggal</th>
-                        <th width="10%" class="text-center">Aksi</th>
+                        <th class="text-center">Status Verifikasi</th>
+                        <th class="text-center" width="15%">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,8 +47,11 @@
                             <td class="text-center">{{ $arsip->firstItem() + $index }}</td>
                             <td>{{ $item->judul }}</td>
                             <td>{{ $item->nomor_arsip ?? '-' }}</td>
-                            <td>{{ $item->kategori_berita ?? '-' }}</td>
+                            <td>{{ $item->tingkat_perkembangan }}</td>
                             <td>{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') : '-' }}</td>
+                            <td class="text-center">
+                                <span class="badge badge-success px-3 py-2">Arsip Publik</span>
+                            </td>
                             <td class="text-center">
                                 
                                 <button type="button" class="btn btn-sm btn-info text-white" data-toggle="modal" data-target="#detailModal{{ $item->id }}" title="Lihat Detail Arsip">
@@ -115,14 +138,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                </td>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center text-muted py-4">
-                                <i class="fas fa-folder-open fa-3x mb-3 text-secondary opacity-50"></i>
-                                <h5>Belum ada arsip publik</h5>
-                                <p>Arsip yang disetujui oleh PPID akan muncul di sini.</p>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="fas fa-globe mb-2" style="font-size: 24px;"></i><br>
+                                Belum ada arsip publik.
                             </td>
                         </tr>
                     @endforelse
